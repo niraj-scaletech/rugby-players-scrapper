@@ -17,14 +17,30 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "node -r tsconfig-paths/register -r ts-node/register ./node_modules/typeorm/cli.js",
+    "migration:generate": "pnpm run typeorm migration:generate ./src/database/migrations/$FOR -d ./src/database/connection/index.ts",
+    "migration:up": "pnpm run typeorm migration:run -d ./src/database/connection/index.ts",
+    "seed": "ts-node ./src/database/seeds/seed.run.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.0.3",
+    "@nestjs/typeorm": "^11.0.0",
+    "@sparticuz/chromium": "^132.0.0",
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "dotenv": "^16.4.7",
+    "pg": "^8.13.1",
+    "puppeteer": "^24.2.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "swagger-ui-express": "^5.0.1",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
