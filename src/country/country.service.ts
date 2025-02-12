@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { CountryScraper } from '../utils'
 import { CountryRepo } from 'src/repo';
 
@@ -13,17 +13,41 @@ export class CountryService {
   async scrapeAndCreate() {
     this.logger.log('Scraping countries...');
 
-    const countries = await CountryScraper.scrapeCountries();
+    try {
+      const countries = await CountryScraper.scrapeCountries();
 
-    await this.countryRepo.save(countries);
-    this.logger.log(`Saved ${countries.length} countries.`);
+      if (countries.length === 0) {
+        this.logger.warn('No countries scraped.');
+        return [];
+      }
 
-    return countries;
+      await this.countryRepo
+        .createQueryBuilder()
+        .insert()
+        .into('country')
+        .values(countries)
+        .orIgnore()
+        .execute();
 
+      this.logger.log(`Saved or ignored ${countries.length} countries.`);
+      return countries;
+    } catch (error) {
+      this.logger.error(`Failed to scrape and save countries: ${error.message}`);
+      throw new InternalServerErrorException(error);
+    }
   }
 
   async findAll() {
-    return await this.countryRepo.find();
+    this.logger.log('Fetching all countries...');
+    try {
+      const countries = await this.countryRepo.find();
+      this.logger.log(`Fetched ${countries.length} countries.`);
+
+      return countries;
+    } catch (error) {
+      this.logger.error(`Failed to fetch countries: ${error.message}`);
+      throw new InternalServerErrorException(error);
+    }
   }
 
 }
