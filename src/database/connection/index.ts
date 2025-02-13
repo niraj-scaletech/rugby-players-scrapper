@@ -18,7 +18,7 @@ export const ormConfig: DataSourceOptions = {
   entities: [path.join(__dirname, '../entity/**/*.entity.{ts,js}')],
   migrations: [path.join(__dirname, '../migrations/**/*.{ts,js}')],
   migrationsTableName: 'migrations',
-  logging: true,
+  logging: false,
 };
 
 export const AppDataSource = new DataSource(ormConfig);

@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { CountryScraper } from '../utils'
+import { CountryScraper } from '../utils';
 import { CountryRepo } from 'src/repo';
 
 @Injectable()
